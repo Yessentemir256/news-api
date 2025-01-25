@@ -3,24 +3,19 @@ package config
 
 import (
 	"github.com/spf13/viper"
+	"log"
 )
 
-type Config struct {
-	DatabaseURL string `mapstructure:"DATABASE_URL"`
-}
-
-func LoadConfig() (*Config, error) {
-	viper.SetConfigFile(".env")
-	viper.AutomaticEnv()
+func InitConfig() {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
 
 	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+		log.Fatalf("Error reading config file: %v", err)
 	}
+}
 
-	var config Config
-	if err := viper.Unmarshal(&config); err != nil {
-		return nil, err
-	}
-
-	return &config, nil
+func GetServerAddress() string {
+	return viper.GetString("server.address")
 }
