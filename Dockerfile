@@ -1,28 +1,30 @@
-# Use the official Golang image with Go 1.23 from Docker Hub
-FROM golang:1.23-alpine
+# Use an official Go runtime as a parent image
+FROM golang:1.20-alpine
 
-# Set the Current Working Directory inside the container
+# Set environment variables
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+# Set the working directory
 WORKDIR /app
 
-# Copy go mod and sum files
+# Copy go.mod and go.sum files
 COPY go.mod go.sum ./
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+# Download dependencies
 RUN go mod download
 
-# Copy the entire project into the container
+# Copy the source code
 COPY . .
 
-# Set the working directory to where your main.go file is located
-WORKDIR /app/cmd/server
+# Build the application
+RUN go build -o main .
 
-# Build the Go app
-RUN go build -o /app/news-api .
-
-# Expose port 8080 to the outside world
+# Expose the application port
 EXPOSE 8080
 
-# Run the Go app
-CMD ["/app/news-api"]
-
+# Command to run the application
+CMD ["./main"]
 
