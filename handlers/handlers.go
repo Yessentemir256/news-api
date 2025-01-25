@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/YOUR_USERNAME/YOUR_PROJECT_NAME/models"
+	"github.com/Yessentemir256/news-api/models"
 	"github.com/go-reform/reform"
 	"github.com/gofiber/fiber/v2"
 )
