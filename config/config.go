@@ -19,3 +19,9 @@ func InitConfig() {
 func GetServerAddress() string {
 	return viper.GetString("server.address")
 }
+
+func GetDatabaseDSN() string {
+	// Define your database DSN here, for example:
+	// return "postgres://user:password@localhost/dbname"
+	return "your_database_dsn_here"
+}

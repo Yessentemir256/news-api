@@ -1,4 +1,3 @@
-// main.go
 package main
 
 import (
@@ -16,8 +15,8 @@ func main() {
 	config.InitConfig()
 
 	// Initialize database
-	db := database.InitDatabase()
-	defer db.Close()
+	db, sqlDB := database.InitDatabase()
+	defer sqlDB.Close() // Close the underlying *sql.DB
 
 	// Create Fiber app
 	app := fiber.New()

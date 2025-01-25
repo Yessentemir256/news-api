@@ -1,6 +1,9 @@
-// models/models.go
 package models
 
+//go:generate reform
+
+// News represents a record in the "news" table.
+//reform:news
 type News struct {
 	ID      int64  `reform:"id,pk"`
 	Title   string `reform:"title"`

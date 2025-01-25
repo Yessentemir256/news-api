@@ -1,21 +1,30 @@
-// database/database.go
 package database
 
 import (
 	"database/sql"
 	"log"
 
-	"github.com/go-reform/reform"
-	"github.com/go-reform/reform/dialects/postgresql"
-	_ "github.com/lib/pq"
+	"gopkg.in/reform.v1"
+	"gopkg.in/reform.v1/dialects/postgresql"
+
+	"github.com/Yessentemir256/news-api/config"
 )
 
-func InitDatabase() *reform.DB {
-	dsn := "user=username password=password dbname=mydb sslmode=disable"
+func InitDatabase() (*reform.DB, *sql.DB) {
+	dsn := config.GetDatabaseDSN()
+
+	// Open *sql.DB
 	sqlDB, err := sql.Open("postgres", dsn)
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatalf("Failed to connect to the database: %v", err)
 	}
+
+	// Configure connection pool if needed (example)
+	sqlDB.SetMaxOpenConns(10)
+	sqlDB.SetMaxIdleConns(5)
+
+	// Initialize reform.DB
 	db := reform.NewDB(sqlDB, postgresql.Dialect, reform.NewPrintfLogger(log.Printf))
-	return db
+
+	return db, sqlDB
 }
